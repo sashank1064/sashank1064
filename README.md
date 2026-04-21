@@ -14,7 +14,7 @@
 
 DevOps / Platform Engineer with 4 years of experience building and operating cloud-native infrastructure at Greenhouse Software and IBM. I focus on CI/CD pipelines, Kubernetes operations, Terraform-driven infra, and observability for customer-facing platforms on AWS and Azure.
 
-Based in New York City. Open to DevOps, SRE, Platform Engineering, Infrastructure Engineering, and Cloud Engineering roles (hybrid or fully remote in the US).
+Based in New York City. Open to DevOps, SRE, Platform Engineering, Infrastructure Engineering, and Cloud Engineering roles (onsite, hybrid, or fully remote in the US).
 
 ### Production impact
 
@@ -155,7 +155,7 @@ Observability via CloudWatch, Prometheus, and Grafana. Tag-driven inventory (`Co
 - Initiating and Planning Projects
 
 <p align="center">
-  <i>Open to DevOps, SRE, Platform, Infrastructure, and Cloud Engineering roles. Based in NYC.</i><br/>
+  <i>Open to DevOps, SRE, Platform, Infrastructure, and Cloud Engineering roles. Onsite, hybrid, or remote. Based in NYC.</i><br/>
   <a href="mailto:sashankallugunti@gmail.com">sashankallugunti@gmail.com</a> &nbsp;·&nbsp;
   <a href="https://www.linkedin.com/in/sashank-allugunti/">LinkedIn</a>
 </p>
