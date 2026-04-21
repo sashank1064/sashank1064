@@ -105,6 +105,47 @@ A portable reference for the same deployment patterns I ship at work. An 11-serv
 | [`terraform`](https://github.com/sashank1064/terraform) | Terraform patterns workspace, one concept per folder |
 | [`terraform-multi-env`](https://github.com/sashank1064/terraform-multi-env) | `tfvars`-per-env vs Terraform workspaces, compared side by side |
 
+### Flagship architecture
+
+What [`roboshop-infra-dev`](https://github.com/sashank1064/roboshop-infra-dev) actually deploys on AWS. Three tiers in isolated subnets, 7 application services on EC2, 4 managed data stores, engineer access behind a VPN and SSM bastion. Provisioned in 13 phased Terraform stacks, bootstrapped by `ansible-pull` on first boot.
+
+```mermaid
+flowchart TB
+    Users([public users]):::ext --> CF[CloudFront CDN]
+    CF --> FALB[Frontend ALB<br/>HTTPS · ACM cert]
+    FALB --> Apps
+
+    subgraph Apps[Application tier · private subnets]
+        direction LR
+        Web[web / nginx]
+        Catalogue[catalogue · node]
+        UserSvc[user · node]
+        Cart[cart · node]
+        Shipping[shipping · java]
+        Payment[payment · python]
+        Dispatch[dispatch · go]
+    end
+
+    Apps --> BALB[Backend ALB · internal]
+    BALB --> Data
+
+    subgraph Data[Data tier · database subnets]
+        direction LR
+        Mongo[(MongoDB)]
+        Redis[(Redis)]
+        MySQL[(MySQL)]
+        Rabbit[(RabbitMQ)]
+    end
+
+    Engineer([engineer]):::ext -.VPN.-> Bastion[Bastion · SSM]
+    Bastion -.-> Apps
+    Bastion -.-> Data
+
+    classDef ext fill:#1f2937,stroke:#6b7280,color:#fff;
+```
+
+Observability via CloudWatch, Prometheus, and Grafana. Tag-driven inventory (`Component`, `Environment`, `Project`) so Ansible discovers hosts the same way cost reports do. Phase-isolated Terraform state in S3 with DynamoDB locking. Modules pulled from [`terraform-aws-vpc`](https://github.com/sashank1064/terraform-aws-vpc), [`terraform-aws-securitygroup`](https://github.com/sashank1064/terraform-aws-securitygroup), [`terraform-aws-instance`](https://github.com/sashank1064/terraform-aws-instance), and [`terraform-aws-roboshop`](https://github.com/sashank1064/terraform-aws-roboshop).
+
 ### Education &amp; certifications
 
 - M.S., Computer Science, Pace University, New York (2025)
