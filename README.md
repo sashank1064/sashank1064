@@ -75,17 +75,35 @@ Based in New York City. Open to DevOps, SRE, Platform Engineering, Infrastructur
 ![SQL](https://img.shields.io/badge/SQL-4479A1?logo=postgresql&amp;logoColor=white)
 ![Go](https://img.shields.io/badge/Go-00ADD8?logo=go&amp;logoColor=white)
 
-### Portfolio projects: RoboShop
+### Portfolio projects: RoboShop platform
 
-A portable reference for the same deployment patterns I ship at work. An 11-service e-commerce platform (Node.js, Java, Python, Go, MongoDB, Redis, MySQL, RabbitMQ, Nginx) provisioned four ways, showing progressive infrastructure maturity:
+A portable reference for the same deployment patterns I ship at work. An 11-service e-commerce platform (Node.js, Java, Python, Go, MongoDB, Redis, MySQL, RabbitMQ, Nginx) built up in layers, from bash on one box to a phased Terraform + Ansible platform on AWS.
+
+**Flagship: layered IaC deployment**
 
 | Repo | What it demonstrates |
 |---|---|
-| [`shell-roboshop`](https://github.com/sashank1064/shell-roboshop) | Bash provisioning, systemd services, Nginx reverse proxy |
-| [`ansible-roboshop`](https://github.com/sashank1064/ansible-roboshop) | Flat Ansible playbooks, idempotent and parameterized |
-| [`ansible-roboshop-roles`](https://github.com/sashank1064/ansible-roboshop-roles) | Refactored to reusable roles with group_vars, handlers, Jinja templates |
-| [`terraform`](https://github.com/sashank1064/terraform) | AWS infra: VPC, EC2, ALB, Route 53, IAM, security groups |
-| [`terraform-multi-env`](https://github.com/sashank1064/terraform-multi-env) | Same infra promoted across dev, stage, and prod with isolated state |
+| [`roboshop-infra-dev`](https://github.com/sashank1064/roboshop-infra-dev) | Full platform in 13 phased Terraform stacks (`00-vpc` to `91-cdn`), isolated state per phase, published modules pinned by ref |
+| [`terraform-aws-roboshop`](https://github.com/sashank1064/terraform-aws-roboshop) | Per-component infra (target group, instance, listener rule, DNS) with `ansible-pull` bootstrap in user_data |
+| [`ansible-roboshop-roles-tf`](https://github.com/sashank1064/ansible-roboshop-roles-tf) | Configuration layer applied by `ansible-pull` on first boot, no control node |
+
+**Published reusable modules**
+
+| Repo | What it demonstrates |
+|---|---|
+| [`terraform-aws-vpc`](https://github.com/sashank1064/terraform-aws-vpc) | Three-tier VPC module, multi-AZ, optional peering, consumed via `git::` source |
+| [`terraform-aws-securitygroup`](https://github.com/sashank1064/terraform-aws-securitygroup) | SG factory with consistent naming and tag-driven discovery |
+| [`terraform-aws-instance`](https://github.com/sashank1064/terraform-aws-instance) | EC2 module with instance-type validation and required tags |
+
+**Progression repos (how the patterns evolved)**
+
+| Repo | What it demonstrates |
+|---|---|
+| [`shell-roboshop`](https://github.com/sashank1064/shell-roboshop) | Bash provisioning, systemd, Nginx reverse proxy, the baseline before IaC |
+| [`ansible-roboshop`](https://github.com/sashank1064/ansible-roboshop) | Flat Ansible playbooks, idempotent, per-service |
+| [`ansible-roboshop-roles`](https://github.com/sashank1064/ansible-roboshop-roles) | Refactored to reusable roles with defaults, handlers, Jinja templates |
+| [`terraform`](https://github.com/sashank1064/terraform) | Terraform patterns workspace, one concept per folder |
+| [`terraform-multi-env`](https://github.com/sashank1064/terraform-multi-env) | `tfvars`-per-env vs Terraform workspaces, compared side by side |
 
 ### Education &amp; certifications
 
