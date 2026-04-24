@@ -75,11 +75,20 @@ Based in New York City. Open to DevOps, SRE, Platform Engineering, Infrastructur
 ![SQL](https://img.shields.io/badge/SQL-4479A1?logo=postgresql&amp;logoColor=white)
 ![Go](https://img.shields.io/badge/Go-00ADD8?logo=go&amp;logoColor=white)
 
-### Portfolio projects: RoboShop platform
+### Portfolio projects
 
-A portable reference for the same deployment patterns I ship at work. An 11-service e-commerce platform (Node.js, Java, Python, Go, MongoDB, Redis, MySQL, RabbitMQ, Nginx) built up in layers, from bash on one box to a phased Terraform + Ansible platform on AWS.
+These are the two projects I would start with if someone wants to review my DevOps work.
 
-**Flagship: layered IaC deployment**
+| Project | Focus | Repo |
+|---|---|---|
+| RoboShop platform | Multi-service AWS infrastructure, Terraform modules, Ansible bootstrap, phased deployments | [`roboshop-infra-dev`](https://github.com/sashank1064/roboshop-infra-dev) |
+| Cloud Native CI/CD on EKS | EKS, ECR, Helm, GitHub Actions, Dockerized Flask service | [`cloud-native-ci-cd`](https://github.com/sashank1064/cloud-native-ci-cd) |
+
+### Project 1: RoboShop platform
+
+An 11-service e-commerce platform (Node.js, Java, Python, Go, MongoDB, Redis, MySQL, RabbitMQ, Nginx) built up in layers, from bash on one box to a phased Terraform + Ansible platform on AWS.
+
+**Main repos**
 
 | Repo | What it demonstrates |
 |---|---|
@@ -87,7 +96,7 @@ A portable reference for the same deployment patterns I ship at work. An 11-serv
 | [`terraform-aws-roboshop`](https://github.com/sashank1064/terraform-aws-roboshop) | Per-component infra (target group, instance, listener rule, DNS) with `ansible-pull` bootstrap in user_data |
 | [`ansible-roboshop-roles-tf`](https://github.com/sashank1064/ansible-roboshop-roles-tf) | Configuration layer applied by `ansible-pull` on first boot, no control node |
 
-**Published reusable modules**
+**Reusable Terraform modules**
 
 | Repo | What it demonstrates |
 |---|---|
@@ -95,7 +104,7 @@ A portable reference for the same deployment patterns I ship at work. An 11-serv
 | [`terraform-aws-securitygroup`](https://github.com/sashank1064/terraform-aws-securitygroup) | SG factory with consistent naming and tag-driven discovery |
 | [`terraform-aws-instance`](https://github.com/sashank1064/terraform-aws-instance) | EC2 module with instance-type validation and required tags |
 
-**Progression repos (how the patterns evolved)**
+**Progression repos**
 
 | Repo | What it demonstrates |
 |---|---|
@@ -105,7 +114,7 @@ A portable reference for the same deployment patterns I ship at work. An 11-serv
 | [`terraform`](https://github.com/sashank1064/terraform) | Terraform patterns workspace, one concept per folder |
 | [`terraform-multi-env`](https://github.com/sashank1064/terraform-multi-env) | `tfvars`-per-env vs Terraform workspaces, compared side by side |
 
-### Flagship architecture
+**Architecture**
 
 What [`roboshop-infra-dev`](https://github.com/sashank1064/roboshop-infra-dev) actually deploys on AWS. Three tiers in isolated subnets, 7 application services on EC2, 4 managed data stores, engineer access behind a VPN and SSM bastion. Provisioned in 13 phased Terraform stacks, bootstrapped by `ansible-pull` on first boot.
 
@@ -145,6 +154,49 @@ flowchart TB
 ```
 
 Observability via CloudWatch, Prometheus, and Grafana. Tag-driven inventory (`Component`, `Environment`, `Project`) so Ansible discovers hosts the same way cost reports do. Phase-isolated Terraform state in S3 with DynamoDB locking. Modules pulled from [`terraform-aws-vpc`](https://github.com/sashank1064/terraform-aws-vpc), [`terraform-aws-securitygroup`](https://github.com/sashank1064/terraform-aws-securitygroup), [`terraform-aws-instance`](https://github.com/sashank1064/terraform-aws-instance), and [`terraform-aws-roboshop`](https://github.com/sashank1064/terraform-aws-roboshop).
+
+### Project 2: Cloud Native CI/CD on EKS
+
+[`cloud-native-ci-cd`](https://github.com/sashank1064/cloud-native-ci-cd) is a smaller EKS project focused on the deployment path for one service. Terraform creates the AWS infrastructure, Docker packages the Flask app, ECR stores the image, Helm deploys the service, and GitHub Actions runs the checks.
+
+| Area | What it shows |
+|---|---|
+| Terraform | VPC, private and public subnets, EKS node group, ECR, IAM, SNS, CloudWatch alarm wiring |
+| Kubernetes | Deployment, service, probes, ALB ingress, AWS Load Balancer Controller integration |
+| CI/CD | Python tests, Terraform validation, Helm lint, Docker build, manual Helm deploy workflow |
+| Local ops | Makefile and deploy script for build, push, and deploy from a laptop |
+
+```mermaid
+flowchart TB
+    Repo[GitHub repo] --> CI[GitHub Actions CI]
+    CI --> Tests[pytest]
+    CI --> TFCheck[terraform validate]
+    CI --> HelmLint[helm lint]
+    CI --> ImageCheck[docker build]
+
+    Dev[local deploy script] --> Build[build image]
+    Build --> ECR[Amazon ECR]
+    Dev --> Kubeconfig[update kubeconfig]
+    Kubeconfig --> Helm[helm upgrade]
+    ECR --> Helm
+
+    subgraph AWS[AWS account]
+        VPC[VPC]
+        EKS[EKS node group]
+        ALB[Application Load Balancer]
+        CW[CloudWatch and SNS]
+    end
+
+    Helm --> Pods[user-service pods]
+    Pods --> Svc[Kubernetes service]
+    Svc --> ALB
+    VPC --> EKS
+    EKS --> Pods
+    ALB --> Users[users]
+    CW -.alerts.-> Dev
+```
+
+This one is intentionally smaller than RoboShop. It is easier to walk through quickly and shows how I structure a container deployment, where Terraform stops, and where Kubernetes starts.
 
 ### Education &amp; certifications
 
