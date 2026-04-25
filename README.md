@@ -165,6 +165,12 @@ Observability via CloudWatch, Prometheus, and Grafana. Tag-driven inventory (`Co
 
 [`cloud-native-ci-cd`](https://github.com/sashank1064/cloud-native-ci-cd) is a smaller EKS project focused on the deployment path for one service. Terraform creates the AWS infrastructure, Docker packages the Flask app, ECR stores the image, Helm deploys the service, and GitHub Actions runs the checks. I also wired the EKS access entry and AWS Load Balancer Controller IRSA role into Terraform so the cluster is usable from a local deploy flow without manual console steps.
 
+<p align="center">
+  <a href="https://github.com/sashank1064/cloud-native-ci-cd">
+    <img src="https://raw.githubusercontent.com/sashank1064/cloud-native-ci-cd/main/docs/screenshots/app-overview.png" alt="Cloud Native CI/CD app preview" width="850">
+  </a>
+</p>
+
 | Area | What it shows |
 |---|---|
 | Terraform | VPC, private and public subnets, EKS node group, ECR, IAM, OIDC provider, EKS access entry, SNS, CloudWatch alarm wiring |
