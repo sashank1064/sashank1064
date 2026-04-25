@@ -157,14 +157,14 @@ Observability via CloudWatch, Prometheus, and Grafana. Tag-driven inventory (`Co
 
 ### Project 2: Cloud Native CI/CD on EKS
 
-[`cloud-native-ci-cd`](https://github.com/sashank1064/cloud-native-ci-cd) is a smaller EKS project focused on the deployment path for one service. Terraform creates the AWS infrastructure, Docker packages the Flask app, ECR stores the image, Helm deploys the service, and GitHub Actions runs the checks.
+[`cloud-native-ci-cd`](https://github.com/sashank1064/cloud-native-ci-cd) is a smaller EKS project focused on the deployment path for one service. Terraform creates the AWS infrastructure, Docker packages the Flask app, ECR stores the image, Helm deploys the service, and GitHub Actions runs the checks. I also wired the EKS access entry and AWS Load Balancer Controller IRSA role into Terraform so the cluster is usable from a local deploy flow without manual console steps.
 
 | Area | What it shows |
 |---|---|
-| Terraform | VPC, private and public subnets, EKS node group, ECR, IAM, SNS, CloudWatch alarm wiring |
-| Kubernetes | Deployment, service, probes, ALB ingress, AWS Load Balancer Controller integration |
+| Terraform | VPC, private and public subnets, EKS node group, ECR, IAM, OIDC provider, EKS access entry, SNS, CloudWatch alarm wiring |
+| Kubernetes | Deployment, service, probes, ALB ingress, AWS Load Balancer Controller integration through IRSA |
 | CI/CD | Python tests, Terraform validation, Helm lint, Docker build, manual Helm deploy workflow |
-| Local ops | Makefile and deploy script for build, push, and deploy from a laptop |
+| Local ops | Makefile and deploy script for build, push, and deploy from a laptop, including linux/amd64 image builds for EKS nodes |
 
 ```mermaid
 flowchart TB
@@ -196,7 +196,7 @@ flowchart TB
     CW -.alerts.-> Dev
 ```
 
-This one is intentionally smaller than RoboShop. It is easier to walk through quickly and shows how I structure a container deployment, where Terraform stops, and where Kubernetes starts.
+This one is intentionally smaller than RoboShop. It is easier to walk through quickly and shows how I structure a container deployment, where Terraform stops, where Kubernetes starts, and how I handle the practical IAM and image-build details that usually show up during a real EKS deployment.
 
 ### Education &amp; certifications
 
