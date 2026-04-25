@@ -200,11 +200,10 @@ flowchart TB
     end
 
     Helm --> Pods[user-service pods]
-    Pods --> Svc[Kubernetes service]
-    Svc --> ALB
     VPC --> EKS
     EKS --> Pods
-    ALB --> Users[users]
+    Users[users] --> ALB
+    ALB --> Pods
     CW -.alerts.-> Dev
 ```
 
