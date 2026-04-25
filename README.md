@@ -88,6 +88,12 @@ These are the two projects I would start with if someone wants to review my DevO
 
 An 11-service e-commerce platform (Node.js, Java, Python, Go, MongoDB, Redis, MySQL, RabbitMQ, Nginx) built up in layers, from bash on one box to a phased Terraform + Ansible platform on AWS.
 
+<p align="center">
+  <a href="https://github.com/sashank1064/roboshop-infra-dev">
+    <img src="assets/project-1-roboshop-preview.png" alt="RoboShop platform preview" width="850">
+  </a>
+</p>
+
 **Main repos**
 
 | Repo | What it demonstrates |
