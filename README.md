@@ -150,14 +150,6 @@ A focused EKS project covering the full deployment path for a containerized Flas
 
 ---
 
-### GitHub stats
-
-<p align="center">
-  <img src="https://github-readme-stats.vercel.app/api?username=sashank1064&show_icons=true&theme=dark&hide_border=true&count_private=true" alt="GitHub Stats" height="160" />
-  &nbsp;&nbsp;
-  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=sashank1064&layout=compact&theme=dark&hide_border=true" alt="Top Languages" height="160" />
-</p>
-
 ---
 
 ### Education & certifications
